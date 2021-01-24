@@ -1,0 +1,25 @@
+{
+  "name": "flappy_bird",
+  "version": "1.0.0",
+  "description": "Copy of the game Flappy Bird using HTML, CSS and Vanilla Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardobattisti/flappy_bird.git"
+  },
+  "keywords": [
+    "flappy-bird",
+    "vanilla-javscript",
+    "css",
+    "html"
+  ],
+  "author": "Eduardo Battisti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eduardobattisti/flappy_bird/issues"
+  },
+  "homepage": "https://github.com/eduardobattisti/flappy_bird#readme"
+}
