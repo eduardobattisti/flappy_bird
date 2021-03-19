@@ -3,7 +3,7 @@ export default class Pipe {
 	constructor(screenWidth, screenHeight, img) {
 		//Get image and image size in pixels		
 		this.img = img;
-		this.imgWidth = this.img.width;		
+		this.imgWidth = this.img.width;
 		this.imgHeight = 200;
 
 		//Map the pipe positions in the screen;
@@ -13,96 +13,102 @@ export default class Pipe {
 		this.seqImages = [];
 
 		//Get screen width and height		
-		this.constWidth = screenWidth;		
+		this.constWidth = screenWidth;
+		this.screenX2 = this.constWidth * 2;
 		this.width = screenWidth;
 		this.height = screenHeight;
 
 		//Top Pipe;
-		this.constWidthTop = (-screenWidth / 2) - this.imgWidth;
-		this.widthTop = (-screenWidth / 2) - this.imgWidth;
+		this.constWidthTop = -screenWidth;
+		this.widthTop = screenWidth;
 		this.heightTop = screenHeight;
+
+		//Top pipe variables
+		this.lengthSeqImagesTop;
+		this.initPositionTop = 0;
+		this.positionsTop = [];		
+		this.seqImagesTop = [];
+
 	};
 
-	getLength() {
+	getLength(ctx) {
 		
-		for(this.width; this.width + this.imgWidth > this.initPosition - this.imgWidth; this.width -= 200) {
-			this.seqImages.push(this.width + this.imgWidth);	
+		//Bottom pipe
+		for(this.screenX2; this.screenX2 > 640; this.screenX2 -= 160) {
+			this.seqImages.push(this.screenX2 - this.imgWidth)	
 		};
 	
 		this.positions = [...this.seqImages];
-		this.lengthSeqImages = this.seqImages.length;						
+		this.lengthSeqImages = this.seqImages.length;
+		
+		//------------------------
+		//Top pipe
+		ctx.save()
+		ctx.translate(this.constWidth, this.height);
+        ctx.rotate(180 * Math.PI/180);
+
+		for(this.widthTop; this.widthTop > -160; this.widthTop -= 160) {
+			this.seqImagesTop.push(-this.widthTop);	
+		};	
+
+		this.positionsTop = [...this.seqImagesTop]
+		this.lengthSeqImagesTop = this.seqImagesTop.length;	
+		ctx.restore();		
+		
 	};
 
 	update(deltatime, ctx) {
 
-
+		//Bottom pipe
 		//Loop in each position of the screen where the image must fill;
 		for(this.lengthSeqImages; this.lengthSeqImages >= -1; this.lengthSeqImages--) {
-			ctx.drawImage(this.img, this.seqImages[this.lengthSeqImages], this.height - 200, this.imgWidth, this.imgHeight);	
-		}
-		//ctx.drawImage(this.img, this.width, this.height - 200, this.imgWidth, this.imgHeight);	
+			ctx.drawImage(this.img, this.seqImages[this.lengthSeqImages], this.height - this.imgHeight, this.imgWidth, this.imgHeight);	
+		};
 
 		//Checks if lengthSeqImages get out of the index;
 		if(this.lengthSeqImages <= -1) {
 			this.lengthSeqImages = this.seqImages.length;
-		}
+		};
 
 		//Update the image. 		
 		this.seqImages = this.seqImages.map((value, i) => {		
-			if(value < this.positions[i] - this.imgWidth) {
-				value = this.positions[i];
+			if(value < -this.imgWidth) {
+				value = this.constWidth + this.imgWidth * 2;
 				return value
 			} else {
-				return value - 4;				
+				return value - 2;				
 			};
 			
 		});		
 
-		//Rotate and translate the top pipe to be draw.
 		ctx.save()
-		ctx.translate(this.constWidth/2, this.height/2);
+		//----------------------------
+		//Top pipe
+		//Rotate and translate the top pipe to be draw.
+		ctx.translate(this.constWidth, this.height);
         ctx.rotate(180 * Math.PI/180);
-		ctx.drawImage(this.img, this.widthTop, this.height - 300, this.imgWidth, this.imgHeight);		
 
-		//Restore Ctx behaviour to the beginning;
-		ctx.restore();
-
-		//Update the bottom Pipe position
-		if(this.width <= -50) {
-			this.width = this.constWidth;
-		} else {
-			this.width -= 4;
-		};
-
-		//Update the top Pipe position
-		if(this.widthTop >= this.constWidth/2) {
-			this.widthTop = this.constWidthTop;
-		} else {
-			this.widthTop += 4;
-		};
-
-		/*
-		//Loop in each position of the screen where the image must fill;
-		for(this.lengthSeqImages; this.lengthSeqImages >= -1; this.lengthSeqImages--) {
-			ctx.drawImage(this.img, this.seqImages[this.lengthSeqImages], this.height - this.imgHeight, this.imgWidth, this.imgHeight);	
+		for(this.lengthSeqImagesTop; this.lengthSeqImagesTop >= -1; this.lengthSeqImagesTop--) {
+			ctx.drawImage(this.img, this.seqImagesTop[this.lengthSeqImagesTop], this.height, this.imgWidth, -this.imgHeight);	
+		}
+	  	
+		//Checks if lengthSeqImages get out of the index;
+		if(this.lengthSeqImagesTop <= -1) {
+			this.lengthSeqImagesTop = this.seqImages.length;
 		}
 		
-		//Checks if lengthSeqImages get out of the index;
-		if(this.lengthSeqImages <= -1) {
-			this.lengthSeqImages = this.seqImages.length;
-		}
-
-		//Update the image. 		
-		this.seqImages = this.seqImages.map((value, i) => {		
-			if(value < this.positions[i] - this.imgWidth) {
-				value = this.positions[i];
+		//Update the image. 				
+		this.seqImagesTop = this.seqImagesTop.map((value, i) => {		
+			if(value > -this.constWidthTop) {
+				value = -this.imgWidth * 3;
 				return value
 			} else {
-				return value - 4;				
+				return value + 2;				
 			};
 			
-		});
-		*/
+		});		
+		//Restore Ctx behaviour to the beginning;
+		ctx.restore();
 
 	};
 

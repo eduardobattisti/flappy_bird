@@ -30,8 +30,8 @@ export default class Bird {
 		//Bird flap animation		
 		//Define each src Image
 		this.birdMovement[0].src = "../assets/sprites/bluebird-downflap.png";
-		this.birdMovement[1].src = "../assets/sprites/bluebird-midflap.png"
-		this.birdMovement[2].src = "../assets/sprites/bluebird-upflap.png"	
+		this.birdMovement[1].src = "../assets/sprites/bluebird-midflap.png";
+		this.birdMovement[2].src = "../assets/sprites/bluebird-upflap.png" ;
 
 		//Draw each bird movement in the screen		
 		ctx.drawImage(this.birdMovement[this.counter], this.position.x, this.position.y, this.width, this.height);	
